@@ -1,0 +1,14 @@
+.vs/
+out/
+build/
+
+*.exe
+*.dll
+*.obj
+*.pdb
+*.ilk
+
+Debug/
+Release/
+x64/
+x86/
