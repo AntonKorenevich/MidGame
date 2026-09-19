@@ -32,12 +32,30 @@ int main()
 			{
 				gameInstance.KeyReleased(keyReleased->scancode);
 			}
+
+			if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>())
+			{
+				if (mousePressed->button == sf::Mouse::Button::Left)
+				{
+					gameInstance.OnLeftBtnPressed(mousePressed->position);
+				}
+			}
+			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
+			{
+				gameInstance.OnMouseMoved(mouseMoved->position);
+			}
+			if (const auto* mouseReleased = event->getIf<sf::Event::MouseButtonReleased>())
+			{
+				if (mouseReleased->button == sf::Mouse::Button::Left)
+				{
+					gameInstance.OnLeftBtnReleased(mouseReleased->position);
+				}
+			}
 		}
 
 		float deltaTime = clock.restart().asSeconds();
 		gameInstance.Update(deltaTime);
 		
-
 		window.clear();
 		gameInstance.Draw();
 		window.display();

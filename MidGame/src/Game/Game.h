@@ -1,6 +1,7 @@
 #pragma once
 #include "Utilities/Utils.h"
 #include "Utilities/InputControls.h"
+#include "AIBoard.h"
 
 class Player;
 
@@ -15,8 +16,17 @@ public:
 	void KeyPressed(sf::Keyboard::Scancode sc);
 	void KeyReleased(sf::Keyboard::Scancode sc);
 
+	void OnLeftBtnPressed(sf::Vector2i vi);
+	void OnMouseMoved(sf::Vector2i vi);
+	void OnLeftBtnReleased(sf::Vector2i vi);
+
 private:
 	sf::RenderWindow& m_window;
-	std::unique_ptr<Player> m_player;
-	InputControls m_ic;
+	AIBoard			m_board;
+	InputControls	m_ic;
+
+	bool			m_drugging;
+	sf::Vector2i	m_mousePosition;
+
+	sf::Clock		m_aiClock;
 };

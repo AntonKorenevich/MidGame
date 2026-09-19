@@ -1,10 +1,10 @@
 #include "Game.h"
-#include "Player.h"
 
 Game::Game(sf::RenderWindow& rw)
 	: m_window(rw)
+	, m_board(rw)
+	, m_drugging(false)
 {
-	m_player = std::make_unique<Player>(rw);
 }
 
 Game::~Game()
@@ -13,19 +13,16 @@ Game::~Game()
 
 void Game::Update(float dt)
 {
-	if (m_player)
-	{
-		m_player->Update(dt);
-		m_player->ApplyForce(m_ic.GetDirection());
-	}
+	if (m_aiClock.getElapsedTime().asSeconds() < 0.5f)
+		return;
+
+	m_aiClock.restart();
+	m_board.Iterate();
 }
 
 void Game::Draw()
 {
-	if (m_player)
-	{
-		m_window.draw(*m_player->GetPlayerRec());
-	}
+	m_board.Draw();
 }
 
 void Game::KeyPressed(sf::Keyboard::Scancode sc)
@@ -36,4 +33,23 @@ void Game::KeyPressed(sf::Keyboard::Scancode sc)
 void Game::KeyReleased(sf::Keyboard::Scancode sc)
 {
 	m_ic.KeyReleased(sc);
+}
+
+void Game::OnLeftBtnPressed(sf::Vector2i vi)
+{
+	m_drugging = m_board.CapturePiece(vi);
+}
+
+void Game::OnMouseMoved(sf::Vector2i vi)
+{
+	if (m_drugging)
+	{
+		m_board.MovePiece(vi);
+	}
+}
+
+void Game::OnLeftBtnReleased(sf::Vector2i vi)
+{
+	m_board.ReleasePiece(vi);
+	m_drugging = false;
 }
